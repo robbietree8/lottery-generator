@@ -31,6 +31,7 @@ def generate():
             print(data)
             st.session_state.data = data
 
+st.set_page_config(page_title="大乐透AI生成器")
 
 st.write('# 大乐透AI生成器')
 
