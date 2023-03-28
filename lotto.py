@@ -15,6 +15,18 @@ prompt = """请随机{0}组数据，每组数据描述如下
 anterior_list = []
 posterior_list = []
 
+st.set_page_config(page_title="大乐透AI生成器")
+# CSS to inject contained in a string
+hide_table_row_index = """
+            <style>
+            thead tr th:first-child {display:none}
+            tbody th {display:none}
+            </style>
+            """
+
+# Inject CSS with Markdown
+st.markdown(hide_table_row_index, unsafe_allow_html=True)
+
 def generate():
     if st.session_state.n_requests >= 5:
         if pd.Timestamp.now().day == st.session_state.last_access.day:
@@ -47,7 +59,7 @@ if "last_access" not in st.session_state:
     st.session_state.last_access = None
 
 
-st.set_page_config(page_title="大乐透AI生成器")
+
 
 st.write('# 大乐透AI生成器')
 
@@ -69,5 +81,4 @@ else:
 if st.session_state.data:
     data = st.session_state.data
     df = pd.DataFrame(json.loads(data))
-    df.index = df.index + 1
-    st.write(df)
+    st.table(df)
