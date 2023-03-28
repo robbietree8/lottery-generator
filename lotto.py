@@ -7,7 +7,7 @@ import os
 openai.api_key = os.getenv("OPENAI_API_KEY") or st.secrets["OPENAI_API_KEY"]
 
 prompt = """请随机{0}组数据，每组数据描述如下
-随机{1}个不重复且小于等于35的前区数字，再随机{2}个不重复且小于等于12的后区数字
+随机{1}个不重复且小于等于35的前区数字并按从小到大排序，再随机{2}个不重复且小于等于12的后区数字并按从小到大排序
 
 请以json数组格式返回，其中字段前区1代表前区的第一个数字，前区2代表前区的第二个数字，后区1代表后区的第一个数字，后区2代表后区的第二个数字
 """
@@ -37,10 +37,19 @@ def generate():
             data = response.choices[0].text
             st.session_state.data = data
 
+if "data" not in st.session_state:
+    st.session_state.data = ""
+if "n_requests" not in st.session_state:
+    st.session_state.n_requests = 0
+if "text_error" not in st.session_state:
+    st.session_state.text_error = ""
+if "last_access" not in st.session_state:
+    st.session_state.last_access = None
+
+
 st.set_page_config(page_title="大乐透AI生成器")
 
 st.write('# 大乐透AI生成器')
-st.write("一天可以生成5次，次日重置次数")
 
 anterior = st.selectbox('前区', [5, 6, 7])
 posterior = st.selectbox('后区', [2, 3])
@@ -52,20 +61,13 @@ submit_btn = st.button('点我暴富', on_click=generate)
 
 spinner_placeholder = st.empty()
 
-if "data" not in st.session_state:
-    st.session_state.data = ""
-if "n_requests" not in st.session_state:
-    st.session_state.n_requests = 0
-if "text_error" not in st.session_state:
-    st.session_state.text_error = ""
-if "last_access" not in st.session_state:
-    st.session_state.last_access = None
+if st.session_state.text_error:
+    st.write(st.session_state.text_error)
+else:
+    st.write(f"您今天还有{5 - st.session_state.n_requests}次暴富机会")
 
 if st.session_state.data:
     data = st.session_state.data
     df = pd.DataFrame(json.loads(data))
     df.index = df.index + 1
     st.write(df)
-
-if st.session_state.text_error:
-    st.write(st.session_state.text_error)
