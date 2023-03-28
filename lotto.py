@@ -13,16 +13,10 @@ prompt = """请随机{0}组数据，每组数据描述如下
 请以json数组格式返回，其中字段前区1代表前区的第一个数字，前区2代表前区的第二个数字，后区1代表后区的第一个数字，后区2代表后区的第二个数字
 """
 
-anterior = st.sidebar.selectbox('前区', [5, 6, 7])
-posterior = st.sidebar.selectbox('后区', [2, 3])
-number_of_groups = st.sidebar.selectbox('串', [1, 3])
 
 anterior_list = []
 posterior_list = []
 
-st.write('# 大乐透')
-st.write('## prompt')
-st.write(prompt.format(number_of_groups, anterior, posterior))
 
 def generate():
     with spinner_placeholder:
@@ -37,7 +31,16 @@ def generate():
             print(data)
             st.session_state.data = data
 
-submit_btn = st.sidebar.button('暴富', on_click=generate)
+
+st.write('# 大乐透AI生成器')
+
+anterior = st.selectbox('前区', [5, 6, 7])
+posterior = st.selectbox('后区', [2, 3])
+number_of_groups = st.selectbox('串数', [1, 3])
+submit_btn = st.button('点我暴富', on_click=generate)
+
+# st.write('## prompt')
+# st.write(prompt.format(number_of_groups, anterior, posterior))
 
 spinner_placeholder = st.empty()
 
