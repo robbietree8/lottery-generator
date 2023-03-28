@@ -12,8 +12,6 @@ prompt = """请随机{0}组数据，每组数据描述如下
 请以json数组格式返回，其中字段前区1代表前区的第一个数字，前区2代表前区的第二个数字，后区1代表后区的第一个数字，后区2代表后区的第二个数字
 """
 
-anterior_list = []
-posterior_list = []
 
 st.set_page_config(page_title="大乐透AI生成器")
 # CSS to inject contained in a string
